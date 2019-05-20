@@ -3,9 +3,8 @@ import React, { Component } from 'react';
 import AppHeader from '../app-header';
 import SearchPanel from '../search-panel';
 import TodoList from '../todo-list';
-import AddTagPanel from '../item-form-add';
-
 import ItemStatusFilter from '../item-status-filter';
+import AddTagPanel from '../item-form-add';
 
 import './app.css';
 
@@ -16,7 +15,8 @@ export default class App extends Component {
             this.createTodoItem('Drink Coffee'),
             this.createTodoItem('Make Awesome App'),
             this.createTodoItem('Have a lunch')
-        ]
+        ],
+        term: ''
     };
 
     createTodoItem(label){
@@ -24,7 +24,8 @@ export default class App extends Component {
             label,
             important: false,
             done: false,
-            id: this.maxId++
+            id: this.maxId++,
+            hide: false
         };
     };
 
@@ -64,7 +65,8 @@ export default class App extends Component {
                     label: todoData[idx].label,
                     important: propName === 'important' ? !todoData[idx].important : todoData[idx].important,
                     done: propName === 'done' ? !todoData[idx].done : todoData[idx].done,
-                    id: todoData[idx].id
+                    id: todoData[idx].id,
+                    hide: false
                 };
 
                 const newArray = [
@@ -86,11 +88,29 @@ export default class App extends Component {
         this.editItem(id, 'important')
     };
 
-    render() {
-        const { todoData } = this.state;
-        const doneCount = todoData.filter((el)=>el.done).length;
+    onFilter = (text) =>{
+        this.setState(({todoData}) =>
+            {
+                //const idx = todoData.findIndex((el)=>el.id === id);
+                const newArray = todoData.map();
+                return {
+                    todoData: newArray
+                }
+            }
+        );
+    };
 
+    search = () =>{
+
+    };
+
+    render() {
+        const { todoData, term } = this.state;
+        const visibleItems = this.search(todoData, term);
+
+        const doneCount = todoData.filter((el)=>el.done).length;
         const todoCount = todoData.length - doneCount;
+
         return (
             <div className="todo-app">
                 <AppHeader toDo={todoCount} done={doneCount}/>
