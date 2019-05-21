@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React, {Component} from 'react'
 import './style.css'
 
 
@@ -8,8 +8,10 @@ export default class AddTagPanel extends Component {
     };
 
     onLabelChange = (e) => {
-        this.setState({label: e.target.value})
-        };
+        this.setState({
+            label: e.target.value
+        })
+    };
 
     onSubmit = (e) => {
         e.preventDefault();
@@ -32,7 +34,8 @@ export default class AddTagPanel extends Component {
                        placeholder="What needs to be done?"/>
                 <div className="input-group-append">
                     <button className="btn btn-secondary">
-                        Add Item</button>
+                        Add Item
+                    </button>
                 </div>
             </form>
         )

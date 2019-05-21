@@ -88,20 +88,18 @@ export default class App extends Component {
         this.editItem(id, 'important')
     };
 
-    onFilter = (text) =>{
-        this.setState(({todoData}) =>
-            {
-                //const idx = todoData.findIndex((el)=>el.id === id);
-                const newArray = todoData.map();
-                return {
-                    todoData: newArray
-                }
-            }
-        );
+    onStringFilter = (term) =>{
+        this.setState({term});
     };
 
-    search = () =>{
+    search = (items, term) =>{
+        if(term.length === 0) {
+            return items;
+        }
 
+        return items.filter((item)=>{
+            return item.label.toLowerCase().indexOf(term.toLowerCase()) > -1
+        })
     };
 
     render() {
@@ -115,11 +113,11 @@ export default class App extends Component {
             <div className="todo-app">
                 <AppHeader toDo={todoCount} done={doneCount}/>
                 <div className="top-panel d-flex">
-                    <SearchPanel/>
+                    <SearchPanel onStringFilter={this.onStringFilter}/>
                     <ItemStatusFilter/>
                 </div>
 
-                <TodoList todos={todoData}
+                <TodoList todos={visibleItems}
                           onDeleted={this.deleteItem}
                           onToggleDone={this.onToggleDone}
                           onToggleImportant={this.onToggleImportant}

@@ -4,7 +4,7 @@ import './item-status-filter.css';
 
 export default class ItemStatusFilter extends Component{
     state = {
-        filter: 'all'
+        filter: ''
         };
 
     onClickButton = (e) => {
