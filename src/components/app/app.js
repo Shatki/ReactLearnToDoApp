@@ -16,7 +16,8 @@ export default class App extends Component {
             this.createTodoItem('Make Awesome App'),
             this.createTodoItem('Have a lunch')
         ],
-        term: ''
+        term: '',
+        filter: 'all'
     };
 
     createTodoItem(label){
@@ -25,7 +26,6 @@ export default class App extends Component {
             important: false,
             done: false,
             id: this.maxId++,
-            hide: false
         };
     };
 
@@ -92,7 +92,7 @@ export default class App extends Component {
         this.setState({term});
     };
 
-    search = (items, term) =>{
+    doSearch = (items, term) =>{
         if(term.length === 0) {
             return items;
         }
@@ -102,9 +102,23 @@ export default class App extends Component {
         })
     };
 
+    onStatusFilter = (filter) =>{
+        this.setState({filter})
+    };
+
+    doFilter = (items, filter) => {
+        if(filter === 'all'){
+            return items;
+        }
+        return items.filter((item)=>{
+            return filter==='done'? item.done === true: item.done === false
+        })
+    };
+
     render() {
-        const { todoData, term } = this.state;
-        const visibleItems = this.search(todoData, term);
+        const { todoData, term, filter } = this.state;
+        const filteredItems = this.doFilter(todoData, filter);
+        const visibleItems = this.doSearch(filteredItems, term);
 
         const doneCount = todoData.filter((el)=>el.done).length;
         const todoCount = todoData.length - doneCount;
@@ -114,7 +128,8 @@ export default class App extends Component {
                 <AppHeader toDo={todoCount} done={doneCount}/>
                 <div className="top-panel d-flex">
                     <SearchPanel onStringFilter={this.onStringFilter}/>
-                    <ItemStatusFilter/>
+                    <ItemStatusFilter filter={filter}
+                                      onStatusFilter={this.onStatusFilter}/>
                 </div>
 
                 <TodoList todos={visibleItems}
